@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    
+  
+    <head>
+        <title>Cadastro carro</title>
+        <link rel="stylesheet" th:href="@{/css/boot.css}" />
+        <link rel="stylesheet" th:href="@{/css/claro.css}" />
+        <!--<link  th:href="@{/css/}+${css}+'.css' " rel="stylesheet" type="text/css"/>-->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    
+  
+    
+    <body>
+        
+        <div class="container">
+            
+            <div class="row">
+                
+                <div class="col-md-12 logo "></div>
+                
+              </div>
+                    
+            </div>
+        
+        <div class="container">
+            <div class="col-md-12">
+            <nav class="navbar navbar-expand-sm navegacao " style="background-color: #C8A27B;border-radius: 5px;">
+                
+                <button
+                    type="button"
+                    data-bs-toggle ="collapse"
+                    data-bs-target="#navBar"
+                    class="navbar-toggler"
+                    aria-controls="navBar"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                    >
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navBar" >
+                    
+                    <ul class="navbar-nav">
+                        
+                        <li class="nav-item active">
+                            <a th:href="@{/tela-inicio}"  class="nav-link">
+                                Tela Inicial
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item active">
+                            <a th:href="@{/inserir-carro}"  class="nav-link active"style="color: #592222;">
+                                Cadastrar Carro
+                            </a>
+                        </li>
+                        
+                         <li class="nav-item active">
+                            <a th:href="@{/inserir-moto}"  class="nav-link">
+                                Cadastrar Moto
+                            </a>
+                        
+                        <li class="nav-item active">
+                            <a th:href="@{/galeria-carros}"  class="nav-link">
+                                Galeria 
+                            </a>
+                        </li>
+                             
+                           <li class="nav-item active">
+                            <a th:href="@{/contato}"  class="nav-link">
+                                Contato
+                            </a>
+                        </li>  
+                             
+                    </ul>
+
+                </div>
+
+            </nav>
+            </div>
+        </div>
+        
+        <div class="container">
+            
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8 fundo">
+                        
+                            <form class="formulario" th:action="@{/guardar-carro}" method="POST" th:object="${carrinho}" >
+
+                   <p>Marca:  
+                       <select th:field="${carrinho.marca}">
+                           <option th:each="opcao : ${marca}" th:text="${opcao}" th:value="${opcao}"  ></option>
+                       </select>
+
+                   </p>
+
+                   <p>Modelo: <input id="modelo"  type="text"  required pattern="[a-zA-Z0-9]+[a-zA-Z0-9 .]+$"
+                                     placeholder="ex: Fusca 1300"
+                                     minlength="2" maxlength="255"
+                                     onchange="this.setCustomValidity('')"
+                                     th:field="${carrinho.modelo}" /></p>
+
+                   <p>Ano de Lançamento: <input class="numero" id="ano_um" type="number" required
+                                                min="1900" max="2005"
+                                                placeholder="ex:1970"
+                                                onchange="this.setCustomValidity('')"
+                                                th:field="${carrinho.ano_um}" /></p>
+
+                   <p>Ultimo Ano de Fabricação:  <input class="numero" id="ano_x" type="number" required 
+                                                        min="1900" max="2005"
+                                                        placeholder="ex:1990"
+                                                        onchange="this.setCustomValidity('')"
+                                                        th:field="${carrinho.ultimo_ano}" /></p>
+
+                   <p id="AlertaAno" style="display: none;">Primeiro ano de fabricação não pode ser maior que o último ano</p>
+
+                   <p>Raridade (1-10) :   <input class="numero"   id="raridade" type="number" required
+                                                            min="1" max="10"
+                                                            placeholder="ex:7"
+                                                            onchange="this.setCustomValidity('')"
+                                                            th:field="${carrinho.raridade}" /></p>
+
+                  <p>Velocidade máxima (km/h) :   <input class="numero"  id="velocidade" type="number"  required
+                                                                                min="1" 
+                                                                                placeholder="ex:128"
+                                                                                onchange="this.setCustomValidity('')"
+                                                                                th:field="${carrinho.velocidade}" /></p> 
+
+                   <p>Potência (cv) :   <input class="numero"  id="potencia" type="number" required
+                                                       min="1" 
+                                                       placeholder="ex:150"
+                                                       onchange="this.setCustomValidity('')"
+                                                        th:field="${carrinho.potencia}" /></p> 
+
+                   <p>Combustivel :  
+                       <select th:field="${carrinho.combustivel}">
+                           <option th:each="opcao : ${combustivel}" th:text="${opcao}" th:value="${opcao}"  ></option>
+                       </select>
+
+                   </p>
+
+                  <p>Refrigeração :  
+                       <select th:field="${carrinho.refrigeracao}">
+                           <option th:each="opcao : ${refrigeracao}" th:text="${opcao}" th:value="${opcao}"  ></option>
+                       </select>
+
+                   </p> 
+
+                   <p>Motor: <input type="text" id="motor" 
+                                     required pattern="[a-zA-Z0-9]+[a-zA-Z0-9  .]+$"
+                                     placeholder="ex: AP 2.0"
+                                     minlength="2" maxlength="255"
+                                     onchange="this.setCustomValidity('')"
+                                      th:field="${carrinho.motor}" /></p>
+
+                   <p>Transmissão:  <input type="text" id="transmissao"
+                                                      required pattern="[a-zA-Z0-9]+[a-zA-Z0-9  .]+$"
+                                                      placeholder="ex: Manual 4 marchas"
+                                                      minlength="2" maxlength="255"
+                                                      onchange="this.setCustomValidity('')"
+                                                      th:field="${carrinho.transmissao}" /></p>
+
+                   <p>Suspensão:  <input type="text" id="suspensao"
+                                                    required pattern="[a-zA-Z0-9]+[a-zA-Z0-9  .]+$"
+                                                    placeholder="ex: Duplo A"
+                                                    minlength="2" maxlength="255"
+                                                    onchange="this.setCustomValidity('')"
+                                                     th:field="${carrinho.suspensao}" /></p>
+
+                    <input type="hidden" th:field="${carrinho.id}" />
+                   <p class="text-center"><input class=" btn btn-success btnPersonalizado" type="submit" onclick="return validarAno()"  value="Cadastrar"/></p>
+
+               </form>
+                    
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+            
+            
+        </div>
+        
+        
+        <script th:src="@{/js/boot.js}"></script> 
+        <script>
+                
+                const inputModelo = document.getElementById("modelo");
+                const inputAnoUm = document.getElementById("ano_um");
+                const inputAnoX = document.getElementById("ano_x");
+                const inputRaridade = document.getElementById("raridade");
+                const inputVelocidade = document.getElementById("velocidade");
+                const inputPotencia = document.getElementById("potencia");
+                const inputMotor = document.getElementById("motor");
+                const inputTransmissao = document.getElementById("transmissao");
+                const inputSuspensao = document.getElementById("suspensao");
+               
+               inputModelo.oninvalid = function(event){
+                   event.target.setCustomValidity("O modelo deve estar preenchido, contando entre 2 e 255 caracteres");
+               };
+               
+               inputAnoUm.oninvalid = function(event){
+                   event.target.setCustomValidity("Ano de fabricação deve estar entre 1900 e 2005");
+               };
+               
+               inputAnoX.oninvalid = function(event){
+                   event.target.setCustomValidity("Ultimo ano de fabricação deve estar entre 1900 e 2005");
+               };
+               
+               inputRaridade.oninvalid = function(event){
+                   event.target.setCustomValidity("Raridade deve estar entre 1 e 10");
+               };
+               
+               inputVelocidade.oninvalid = function(event){
+                   event.target.setCustomValidity("Velocidade não pode ser vazia ou negativa");
+               };
+               
+               inputPotencia.oninvalid = function(event){
+                   event.target.setCustomValidity("Potencia não pode ser vazia ou negativa");
+               };
+               
+               inputMotor.oninvalid = function(event){
+                   event.target.setCustomValidity("O motor deve estar preenchido, contando entre 2 e 255 caracteres");
+               };
+               
+               inputTransmissao.oninvalid = function(event){
+                   event.target.setCustomValidity("A transmissão deve estar preenchido, contando entre 2 e 255 caracteres");
+               };
+               
+               inputSuspensao.oninvalid = function(event){
+                   event.target.setCustomValidity("A suspensão deve estar preenchido, contando entre 2 e 255 caracteres");
+               };
+               
+               
+               function validarAno(){
+                   
+                   var ultimo = document.getElementById("ano_x").value;
+                   var primeiro = document.getElementById("ano_um").value;
+                   
+                   if(ultimo>=primeiro){
+                       document.getElementById("AlertaAno").setAttribute('style','display:none;');
+                       return true;
+                   }else{
+                       document.getElementById("AlertaAno").setAttribute('style','display:block;');
+                       return false;
+                   }
+               };
+                      
+        </script>
+
+    </body>
+    
+</html>

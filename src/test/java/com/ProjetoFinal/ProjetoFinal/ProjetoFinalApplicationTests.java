@@ -1,10 +1,10 @@
-package com.projeto.ProjetoIntegrador;
+package com.ProjetoFinal.ProjetoFinal;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ProjetoIntegradorApplicationTests {
+class ProjetoFinalApplicationTests {
 
 	@Test
 	void contextLoads() {

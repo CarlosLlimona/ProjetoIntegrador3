@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    
+  
+    <head>
+        <title>Galeria</title>
+        <link rel="stylesheet" th:href="@{/css/boot.css}" />
+        <link rel="stylesheet" th:href="@{/css/claro.css}" />
+        <!--<link  th:href="@{/css/}+${css}+'.css' " rel="stylesheet" type="text/css"/>-->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    
+  
+    
+    <body>
+        
+        <div class="container">
+            
+            <div class="row">
+                
+                <div class="col-md-12 logo "></div>
+                
+              </div>
+                    
+            </div>
+        
+        <div class="container">
+            <div class="col-md-12">
+            <nav class="navbar navbar-expand-sm navegacao " style="background-color: #C8A27B;border-radius: 5px;">
+                
+                <button
+                    type="button"
+                    data-bs-toggle ="collapse"
+                    data-bs-target="#navBar"
+                    class="navbar-toggler"
+                    aria-controls="navBar"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                    >
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navBar" >
+                    
+                    <ul class="navbar-nav">
+                        
+                        <li class="nav-item active">
+                            <a th:href="@{/tela-inicio}"  class="nav-link" >
+                                Tela Inicial
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item active">
+                            <a th:href="@{/inserir-carro}"  class="nav-link">
+                                Cadastrar Carro
+                            </a>
+                        </li>
+                        
+                          <li class="nav-item active">
+                            <a th:href="@{/inserir-moto}"  class="nav-link">
+                                Cadastrar Moto
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item active">
+                            <a th:href="@{/galeria-carros}"  class="nav-link active"style="color: #592222;">
+                                Galeria
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item active">
+                            <a th:href="@{/contato}"  class="nav-link">
+                                Contato
+                            </a>
+                        </li>
+                        
+                    </ul>
+
+                </div>
+
+            </nav>
+            </div>
+        </div>
+        
+        
+        
+        
+        <div class="container">
+            
+            <div class="row fundo">
+                
+                <div class="col-md-12"><h2 class="text-center">Carros clássicos</h2></div>
+                
+                
+                <div class="col-md-4" th:each="carro : ${carros}">
+                    
+                    <div class="col-md-12" style="border: 4px solid brown;margin-bottom: 25px;border-radius: 3px"  th:if="${carro.marca=='Outro'} ">
+                        <img  th:src="@{/images/}+'Outra.jpg' " style="width:100%;height: 220px"  />
+                        <div class="col-md-12" style="border-top:4px solid brown;">
+                            <p class="text-center" style="margin-top: 3px;"  th:text="${carro.modelo}"></p>
+                            <div class="col-md-12  text-center">
+                                <a class=" btn btn-success btnPersonalizado"style="padding: 3%;margin-bottom:5%;"  th:href="@{/exibir-carro(id=${carro.id})}">Exibir detalhes</a>
+                                <a class=" btn btn-warning btnPersonalizado"style="padding: 3%;margin-bottom:5%; color: white;" th:href="@{/atualizar-veiculo(id=${carro.id})}">Atualizar</a>
+                                <a class=" btn btn-danger btnPersonalizado"style="padding: 3%;margin-bottom:5%; color: white;" th:href="@{/excluir-carro(id=${carro.id})}">Excluir</a>
+                            </div>
+                        </div>
+                        
+                    </div >
+                    <div class="col-md-12 " style="border: 4px solid brown;margin-bottom: 25px;border-radius: 3px"  th:if="${carro.marca!='Outro'} ">
+                        <img  th:src="@{/images/}+${carro.marca}+'.jpg' " style="width:100%;height: 220px"  />
+                        <div class="col-md-12" style="border-top:4px solid brown;">
+                            <p class="text-center" style="margin-top: 3px;" th:text="${carro.modelo}"></p>
+                            <div class="col-md-12 text-center ">
+                                <a class=" btn btn-success btnPersonalizado" style="padding: 3%;margin-bottom:5%;"  th:href="@{/exibir-carro(id=${carro.id})}">Exibir detalhes</a>
+                                <a class=" btn btn-warning btnPersonalizado"style="padding: 3%;margin-bottom:5%; color: white;" th:href="@{/atualizar-veiculo(id=${carro.id})}">Atualizar</a>
+                                <a class=" btn btn-danger btnPersonalizado"style="padding: 3%;margin-bottom:5%;color: white;" th:href="@{/excluir-carro(id=${carro.id})}">Excluir</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                
+            </div>
+            
+        </div> 
+        
+        
+        
+        
+                <div class="container">
+            
+            <div class="row fundo">
+                
+                <div class="col-md-12"><h2 class="text-center">Motos clássicas</h2></div>
+                
+                
+                <div class="col-md-4" th:each="moto : ${motos}">
+                    
+                    <div class="col-md-12" style="border: 4px solid brown;margin-bottom: 25px;border-radius: 3px"  th:if="${moto.marca=='Outro'} ">
+                        <img  th:src="@{/images/}+'Outro2.jpg' " style="width:100%;height: 220px"  />
+                        <div class="col-md-12" style="border-top:4px solid brown;">
+                            <p class="text-center" style="margin-top: 3px;"  th:text="${moto.modelo}"></p>
+                            <div class="col-md-12  text-center">
+                                <a class=" btn btn-success btnPersonalizado"style="padding: 3%;margin-bottom:5%;"  th:href="@{/exibir-moto(id=${moto.id})}">Exibir detalhes</a>
+                                <a class=" btn btn-warning btnPersonalizado"style="padding: 3%;margin-bottom:5%; color: white;" th:href="@{/atualizar-moto(id=${moto.id})}">Atualizar</a>
+                                 <a class=" btn btn-danger btnPersonalizado"style="padding: 3%;margin-bottom:5%; color: white;" th:href="@{/excluir-moto(id=${moto.id})}">Excluir</a>
+                            </div>
+                        </div>
+                        
+                    </div >
+                    <div class="col-md-12 " style="border: 4px solid brown;margin-bottom: 25px;border-radius: 3px"  th:if="${moto.marca!='Outro'} ">
+                        <img  th:src="@{/images/}+${moto.marca}+'.jpg' " style="width:100%;height: 220px"  />
+                        <div class="col-md-12" style="border-top:4px solid brown;">
+                            <p class="text-center" style="margin-top: 3px;" th:text="${moto.modelo}"></p>
+                            <div class="col-md-12 text-center ">
+                                <a class=" btn btn-success btnPersonalizado" style="padding: 3%;margin-bottom:5%;"  th:href="@{/exibir-moto(id=${moto.id})}">Exibir detalhes</a>
+                                <a class=" btn btn-warning btnPersonalizado"style="padding: 3%;margin-bottom:5%; color: white;" th:href="@{/atualizar-moto(id=${moto.id})}">Atualizar</a>
+                                <a class=" btn btn-danger btnPersonalizado"style="padding: 3%;margin-bottom:5%;color: white;" th:href="@{/excluir-moto(id=${moto.id})}">Excluir</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                
+            </div>
+            
+        </div> 
+        
+        
+       
+
+        
+
+        <script th:src="@{/js/boot.js}"></script> 
+    </body>
+</html>

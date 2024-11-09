@@ -1,0 +1,89 @@
+
+body{
+    background-image: linear-gradient(to bottom right, #cc3900, #b7410e,#a6481f);
+    background-attachment: fixed;
+    font-family: Verdana;
+    color: black;
+}
+
+.fundo{
+    margin-top: 10px;
+    background-color: #ffe4b5;
+    border: 6px solid #d05a27;
+    padding-top: 5px;
+    border-radius: 20px;
+}
+
+.fundo h1,h2,h3,h4{
+color: #a6481f;
+padding-top: 5px;
+padding-bottom: 10px;
+}
+
+.fundo p{
+    color:#cc3900;
+    padding-bottom: 10px;
+    font-weight: 800;
+}
+
+.logo {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    background-image: url('../images/Classic Gasosa.png');
+    background-repeat: no-repeat;
+    height: 300px;
+    background-size: 30%;
+    background-color: #C8A27B;
+    background-position: center center;
+    border-radius: 20px;
+    border: 6px solid #d05a27;
+}
+
+.navegacao{
+    margin:2px;
+}
+
+.navegacao a{
+    padding: 10px;
+    color: #a6481f;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+/*.formulario{
+    border: 1px solid black;
+}*/
+
+input{
+    border:1px solid brown;
+   max-width: 80%;
+   font-weight: 500;
+}
+
+.numero{
+    width: 35%;
+}
+
+select{
+    max-width: 90%;
+    border:1px solid brown;
+    font-weight: 500;
+}
+
+.btnPersonalizado{
+    background-color: #d05a27;
+    border:none;
+}
+
+textarea{
+    resize: none;
+    font-weight: 500;
+}
+
+.par{
+    background-color: #DBCEA7;
+}
+
+.impar{
+    background-color: #B1AB9A;
+}

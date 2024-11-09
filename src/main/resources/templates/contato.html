@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    
+  
+    <head>
+        <title>Tela inicial</title>
+        <link rel="stylesheet" th:href="@{/css/boot.css}" />
+        <link rel="stylesheet" th:href="@{/css/claro.css}" />
+        <!--<link  th:href="@{/css/}+${css}+'.css' " rel="stylesheet" type="text/css"/>-->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    
+  
+    
+    <body>
+        
+        
+        <div class="container">
+            
+            <div class="row">
+                
+                <div class="col-md-12 logo "></div>
+                
+              </div>
+                    
+            </div>
+            
+        
+        <div class="container">
+            <div class="col-md-12">
+            <nav class="navbar navbar-expand-sm navegacao " style="background-color: #C8A27B;border-radius: 5px;">
+                
+                <button
+                    type="button"
+                    data-bs-toggle ="collapse"
+                    data-bs-target="#navBar"
+                    class="navbar-toggler"
+                    aria-controls="navBar"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                    >
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navBar" >
+                    
+                    <ul class="navbar-nav">
+                        
+                        <li class="nav-item active">
+                            <a th:href="@{/tela-inicio}"  class="nav-link">
+                                Tela Inicial
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item active">
+                            <a th:href="@{/inserir-carro}"  class="nav-link">
+                                Cadastrar Carro
+                            </a>
+                        </li>
+                        
+                          <li class="nav-item active">
+                            <a th:href="@{/inserir-moto}"  class="nav-link">
+                                Cadastrar Moto
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item active">
+                            <a th:href="@{/galeria-carros}"  class="nav-link">
+                                Galeria 
+                            </a>
+                        </li>
+                  
+                    <li class="nav-item active">
+                            <a th:href="@{/contato}"  class="nav-link active" style="color: #592222;">
+                                Contato
+                            </a>
+                        </li>
+                    </ul>
+                    
+                </div>
+
+            </nav>
+            </div>
+        </div>
+        
+        <div class="container">
+            
+            <div class="row">
+                
+                <div class="col-md-12 fundo">
+                    <h1 class="text-center">Contato</h1> 
+                    <p class="text-center">Quer deixar alguma pergunta, observação ou sugestão?</p> 
+                    <p class="text-center">Nos envie pelo formulário: </p> 
+                </div>
+                
+            </div>
+            
+            <div class="row">
+                <div class="col-md-2"></div>
+                
+                <div class="col-md-8 fundo" style="padding: 10px;">
+                    
+                    <form th:action="@{/guardar-sugestao}" method="POST" th:object="${sugestao}">
+                        
+                        <p>Seu Nome: <input id="nome"  type="text"  required pattern="[a-zA-Z]+[a-zA-Z ]+$"
+                                     placeholder="ex: João"
+                                     minlength="3" maxlength="255"
+                                     onchange="this.setCustomValidity('')"
+                                     th:field="${sugestao.nome}" /></p>
+                        
+                        <p>Seu e-mail <input id="email"  type="email"  required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                                     placeholder="ex: joao@email.com"
+                                     minlength="2" maxlength="255"
+                                     onchange="this.setCustomValidity('')"
+                                     th:field="${sugestao.email}" /></p>
+                        
+                        <p>Seu comentário:</p>
+              <textarea class="form-control" style="border:1px solid brown;" id="mensagem" rows="3" th:field="${sugestao.mensagem}"
+                        required pattern="[a-zA-Z0-9]+[a-zA-Z0-9  .]+$"
+                        placeholder="ex: meu comentário"
+                        minlength="3" maxlength="255"
+                        onchange="this.setCustomValidity('')"
+                        ></textarea>
+                        
+                        <input type="hidden" th:field="${sugestao.id}"/> 
+                        <p class="text-center" style="padding-top: 10px;margin-top: 10px;"><input class=" btn btn-success btnPersonalizado" type="submit"  value="Enviar"/></p>
+                        
+                    </form>
+                    
+                    
+                </div>
+                
+                <div class="col-md-2"></div>
+            </div>
+            
+        </div>
+
+        <script th:src="@{/js/boot.js}"></script> 
+        <script>
+            
+            const inputNome = document.getElementById("nome");
+            const inputEmail = document.getElementById("email");
+            const inputMensagem = document.getElementById("mensagem");
+            
+            
+            inputNome.oninvalid=function(event){
+              event.target.setCustomValidity("Nome deve estar preenchido, contendo entre 3 e 255 caracteres");    
+            };
+            
+            inputEmail.oninvalid=function(event){
+              event.target.setCustomValidity("E-mail deve estar preenchido e no formato exemplo@email.com");    
+            };
+            
+            inputMensagem.oninvalid=function(event){
+              event.target.setCustomValidity("Mensagem deve estar preenchida, contendo entre 3 e 255 caracteres");    
+            };
+            
+            
+        </script>
+        
+        
+        
+    </body>
+</html>
