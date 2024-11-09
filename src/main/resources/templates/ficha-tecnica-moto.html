@@ -173,7 +173,7 @@
                 <div class="col-md-12" style='margin-top: 10px;padding-top: 5px;'  th:each="aval,estado : ${opinioes}" th:classappend="${estado.odd}?'par' : 'impar'  ">
                         <p style='color:black;'><span th:text="${aval.nome}"></span></p>
                         <p style='color:black;'><span th:text="${aval.avaliacao}"></span></p>
-                        <a class=" btn btn-danger btnPersonalizado"style="color: white;margin-bottom: 3px;" th:href="@{/excluir-opiniaoMoto(id=${aval.id})}">Excluir</a>
+                        <a class=" btn btn-danger btnPersonalizado"style="color: white;margin-bottom: 3px;" th:href="@{/excluir-opiniaoMoto/{id}(id=${aval.id})}">Excluir</a>
                 </div>
                 
             </div>

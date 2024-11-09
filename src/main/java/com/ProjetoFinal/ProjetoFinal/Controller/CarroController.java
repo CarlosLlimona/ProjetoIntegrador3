@@ -6,17 +6,36 @@ import com.ProjetoFinal.ProjetoFinal.Model.Dados;
 import com.ProjetoFinal.ProjetoFinal.Model.Moto;
 import com.ProjetoFinal.ProjetoFinal.Model.Opiniao;
 import com.ProjetoFinal.ProjetoFinal.Model.OpiniaoMoto;
+import com.ProjetoFinal.ProjetoFinal.Service.CarroService;
+import com.ProjetoFinal.ProjetoFinal.Service.MotoService;
+import com.ProjetoFinal.ProjetoFinal.Service.OpiniaoMotoService;
+import com.ProjetoFinal.ProjetoFinal.Service.OpiniaoService;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class CarroController {
+    
+    @Autowired
+    CarroService carroService;
+    
+    @Autowired
+    OpiniaoService opiniaoCarroService;
+    
+    @Autowired
+    MotoService motoService;
+    
+    @Autowired
+    OpiniaoMotoService opiniaoMotoService;
+    
     
     private List<Carro> listaCarros = new ArrayList<>();
     private List<Opiniao> listaOpinioes = new ArrayList<>();
@@ -26,7 +45,7 @@ public class CarroController {
     
     @GetMapping("/tela-inicio")
     public String mostrarHome(Model model){
-        model.addAttribute("lista", listaOpinioes);
+       // model.addAttribute("lista", listaOpinioes);
         return "index";
     }
     
@@ -44,16 +63,23 @@ public class CarroController {
     
     @GetMapping("/galeria-carros")
     public String mostrarGaleriaCarros(Model model){
-        model.addAttribute("carros", listaCarros);
-        model.addAttribute("motos", listaMotos);
+        //model.addAttribute("carros", listaCarros);
+        model.addAttribute("carros", carroService.buscarCarros());
+        //model.addAttribute("motos", listaMotos);
+        model.addAttribute("motos", motoService.buscarMotos());
         return "galeria-carros";
     }
     
     
     @PostMapping("/guardar-carro")
-    public String processarFormularioCarro(Model model, @ModelAttribute Carro carro){
+    public String processarFormularioCarro(Model model, @ModelAttribute("carrinho") Carro carro){
         
         if(carro.getId()!=null){
+            carroService.atualizarCarro(carro.getId(),carro);
+        }else{
+            carroService.adicionarCarro(carro);
+        }
+      /*  if(carro.getId()!=null){
             
             for(Carro car: listaCarros){
                 
@@ -80,7 +106,7 @@ public class CarroController {
         else{
             carro.setId(listaCarros.size()+1);
             listaCarros.add(carro);
-        }
+        }*/
         
         return "redirect:/galeria-carros";
         
@@ -88,9 +114,9 @@ public class CarroController {
     
     
      
-    @GetMapping("/atualizar-veiculo")
-    public String atualizarCarro(Model model,@RequestParam String id){
-        Integer idCarro = Integer.parseInt(id);
+    @GetMapping("/atualizar-veiculo/{id}")
+    public String atualizarCarro(Model model,@PathVariable(value="id")Integer id){
+      /*  Integer idCarro = Integer.parseInt(id);
         Carro carroLocalizado = new Carro();
         
         for(Carro carro : listaCarros){
@@ -98,7 +124,11 @@ public class CarroController {
                 carroLocalizado = carro;
                 break;
             }
-        }
+        }*/
+        
+        Carro carroLocalizado = carroService.buscarCarroPeloId(id);
+      
+      
         model.addAttribute("carrinho", carroLocalizado);
         model.addAttribute("marca", Dados.marcasCarro());
         model.addAttribute("combustivel", Dados.combustiveis());
@@ -107,10 +137,14 @@ public class CarroController {
         return "cadastro-carro";
     }
     
-    @GetMapping("/excluir-carro")
-    public String excluirCarro(Model model, @RequestParam String id){
+    @GetMapping("/excluir-carro/{id}")
+    public String excluirCarro(Model model, @PathVariable(value="id")Integer idCarro){
         
-        Integer idCarro = Integer.parseInt(id);
+        opiniaoCarroService.excluirTodasOpinioesCarro(idCarro);
+        
+        carroService.excluirCarro(idCarro);
+        
+       /* Integer idCarro = Integer.parseInt(id);
         
         Carro carroEncontrado = new Carro();
         for(Carro carro : listaCarros){
@@ -138,7 +172,7 @@ public class CarroController {
         }
         else{
             listaCarros.remove(carroEncontrado);
-        }
+        }*/
         
         return "redirect:/galeria-carros";
 
@@ -146,10 +180,14 @@ public class CarroController {
     
     
     
-    @GetMapping("/exibir-carro")
-    public String mostrarTelaFichaCarro(Model model, @RequestParam String id){
+    @GetMapping("/exibir-carro/{id}")
+    public String mostrarTelaFichaCarro(Model model, @PathVariable(value="id")Integer id){
         
-        Integer idCarro = Integer.parseInt(id);
+        Carro carroEncontrado = carroService.buscarCarroPeloId(id);
+        
+        List<Opiniao> opinioesEncontradas = opiniaoCarroService.buscarOpinioesDoCarro(id);
+        
+       /* Integer idCarro = Integer.parseInt(id);
         
         Carro carroEncontrado = new Carro();
         
@@ -162,10 +200,10 @@ public class CarroController {
         
         List<Opiniao> opinioesEncontradas = new ArrayList<>();
         for(Opiniao opiniao:listaOpinioes){
-            if(opiniao.getCarroID()==idCarro){  /*<----------*/
+            if(opiniao.getCarroID()==idCarro){  
                 opinioesEncontradas.add(opiniao);
             }
-        }
+        }*/
         
         model.addAttribute("carrinho", carroEncontrado);
         model.addAttribute("opinioes", opinioesEncontradas);
@@ -175,21 +213,25 @@ public class CarroController {
     }
     
     @PostMapping("/guardar-opiniao")
-    public String processarFormularioOpiniao(Model model, @ModelAttribute Opiniao opiniao, @ModelAttribute Carro carrinho){
+    public String processarFormularioOpiniao(Model model, @ModelAttribute("novaOpiniao") Opiniao opiniao, @ModelAttribute("carrinho") Carro carrinho){
        // Integer idCarrinho = Integer.parseInt(idCarro);
         
         //opiniao.setCarroID(idCarrinho); /*Ficar esperto*/
         
-        opiniao.setId(listaOpinioes.size()+1);
-        listaOpinioes.add(opiniao);
+       /* opiniao.setId(listaOpinioes.size()+1);
+        listaOpinioes.add(opiniao);*/
+       
+       opiniaoCarroService.adicionarOpiniaoCarro(opiniao);
         
         return "redirect:/galeria-carros";
     }
     
-    @GetMapping("/excluir-opiniao")
-    public String excluirOpiniaoIndividual(Model model, @RequestParam String id){
+    @GetMapping("/excluir-opiniao/{id}")
+    public String excluirOpiniaoIndividual(Model model, @PathVariable(value="id")Integer id){
         
-        Integer idOpiniao = Integer.parseInt(id);
+        opiniaoCarroService.excluirOpiniao(id);
+        
+        /*Integer idOpiniao = Integer.parseInt(id);
         
         for(Opiniao opiniao : listaOpinioes){
             
@@ -198,7 +240,7 @@ public class CarroController {
                 break;
             }
             
-        }
+        }*/
         
         return "redirect:/galeria-carros";
     }
@@ -218,9 +260,14 @@ public class CarroController {
     }
     
     @PostMapping("/guardar-moto")
-    public String processarFormularioMoto(Model model, @ModelAttribute Moto moto){
+    public String processarFormularioMoto(Model model, @ModelAttribute("moto") Moto moto){
         
         if(moto.getId()!=null){
+            motoService.atualizarMoto(moto.getId(), moto);
+        }else{
+            motoService.adicionarMoto(moto);
+        }
+       /* if(moto.getId()!=null){
             
             for(Moto mot : listaMotos){
                 
@@ -247,16 +294,16 @@ public class CarroController {
         }else{
             moto.setId(listaMotos.size()+1);
             listaMotos.add(moto);
-        }
+        }*/
         
         return "redirect:/galeria-carros";
         
     }
     
-    @GetMapping("/atualizar-moto")
-    public String atualizarMoto(Model model, @RequestParam String id){
+    @GetMapping("/atualizar-moto/{id}")
+    public String atualizarMoto(Model model, @PathVariable(value="id")Integer id){
         
-        Integer idMoto = Integer.parseInt(id);
+     /*   Integer idMoto = Integer.parseInt(id);
         Moto motoLocalizada = new Moto();
         
         for(Moto moto: listaMotos){
@@ -264,7 +311,9 @@ public class CarroController {
                 motoLocalizada = moto;
                 break;
             }
-        }
+        }*/
+        
+        Moto motoLocalizada = motoService.buscarMotoPeloId(id);
         
         model.addAttribute("moto", motoLocalizada);
         model.addAttribute("marca", Dados.marcasMoto());
@@ -276,10 +325,14 @@ public class CarroController {
         
     }
     
-    @GetMapping("/excluir-moto")
-    public String excluirMoto(Model model, @RequestParam String id){
+    @GetMapping("/excluir-moto/{id}")
+    public String excluirMoto(Model model, @PathVariable(value="id")Integer idMoto){
         
-        Integer idMoto = Integer.parseInt(id);
+        opiniaoMotoService.excluirTodasOpinioesMoto(idMoto);
+        
+        motoService.excluirMoto(idMoto);
+        
+       /* Integer idMoto = Integer.parseInt(id);
         
         Moto motoLocalizada = new Moto();
         for(Moto moto: listaMotos){
@@ -307,16 +360,20 @@ public class CarroController {
         }
         else{
             listaMotos.remove(motoLocalizada);
-        }
+        }*/
         
          return "redirect:/galeria-carros";
         
     }
     
-    @GetMapping("/exibir-moto")
-    public String mostrarFichaMoto(Model model, @RequestParam String id){
+    @GetMapping("/exibir-moto/{id}")
+    public String mostrarFichaMoto(Model model, @PathVariable(value="id")Integer id){
         
-        Integer idMoto = Integer.parseInt(id);
+        Moto motoLocalizada = motoService.buscarMotoPeloId(id);
+        
+        List<OpiniaoMoto> opinioesEncontradas = opiniaoMotoService.buscarOpinioesMoto(id);
+        
+        /*Integer idMoto = Integer.parseInt(id);
         
         Moto motoLocalizada = new Moto();
         for(Moto moto: listaMotos){
@@ -331,7 +388,7 @@ public class CarroController {
             if(opiniao.getMotoID()==idMoto){
                 opinioesEncontradas.add(opiniao);
             }
-        }
+        }*/
         
         model.addAttribute("moto",motoLocalizada);
         model.addAttribute("opinioes", opinioesEncontradas);
@@ -342,19 +399,23 @@ public class CarroController {
     }
     
     @PostMapping("/guardar-opiniaoMoto")
-    public String processarFormularioOPmoto(Model model,@ModelAttribute OpiniaoMoto opiniao, @ModelAttribute Moto moto){
+    public String processarFormularioOPmoto(Model model,@ModelAttribute("novaOpiniao") OpiniaoMoto opiniao, @ModelAttribute("moto") Moto moto){
         
-        opiniao.setId(listaOpMoto.size()+1);
-        listaOpMoto.add(opiniao);
+       /* opiniao.setId(listaOpMoto.size()+1);
+        listaOpMoto.add(opiniao);*/
+       
+       opiniaoMotoService.adicionarOpiniaoMoto(opiniao);
         
         return "redirect:/galeria-carros";
         
     }
     
-    @GetMapping("/excluir-opiniaoMoto")
-    public String excluirOPmoto(Model model,@RequestParam String id){
+    @GetMapping("/excluir-opiniaoMoto/{id}")
+    public String excluirOPmoto(Model model,@PathVariable(value="id")Integer id){
         
-        Integer idOpiniao = Integer.parseInt(id);
+        opiniaoMotoService.excluirOpiniao(id);
+        
+      /*  Integer idOpiniao = Integer.parseInt(id);
         
         for(OpiniaoMoto opiniao: listaOpMoto){
             
@@ -363,7 +424,7 @@ public class CarroController {
                 break;
             }
             
-        }
+        }*/
          return "redirect:/galeria-carros";
         
     }
